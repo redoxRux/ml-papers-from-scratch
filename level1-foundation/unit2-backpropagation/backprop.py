@@ -25,9 +25,9 @@ class NeuralNetwork:
     def backward(self, x, y):
         error = (self.a2 - y) ** 2
         delta_output = (self.a2 - y) * (self.a2 * (1 - self.a2))
-        blame_w2 = delta_output * self.a1
-        delta_hidden = delta_output * self.w2 * (self.a1 * (1 - self.a1))
-        blame_w1 = delta_hidden * x
+        blame_w2 = np.outer(self.a1, delta_output )
+        delta_hidden = delta_output * self.w2.flatten() * (self.a1 * (1 - self.a1))
+        blame_w1 =np.outer( x, delta_hidden) 
 
 
         self.w2 -= self.lr * blame_w2
