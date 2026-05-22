@@ -23,4 +23,24 @@ class NeuralNetwork:
         return self.a2
     
     def backward(self, x, y):
-        
+        error = (self.a2 - y) ** 2
+        delta_output = (self.a2 - y) * (self.a2 * (1 - self.a2))
+        blame_w2 = delta_output * self.a1
+        delta_hidden = delta_output * self.w2 * (self.a1 * (1 - self.a1))
+        blame_w1 = delta_hidden * x
+
+
+        self.w2 -= self.lr * blame_w2
+        self.w1 -= self.lr * blame_w1
+        self.b2 -= self.lr * delta_output
+        self.b1 -= self.lr * delta_hidden
+
+
+    def fit(self, X, y, epochs=100):
+        for epoch in range(epochs):
+            for x_i, y_i in zip(X, y):
+                self.forward(x_i)
+                self.backward(x_i, y_i)
+    
+    def predict(self,x):
+        return self.forward(x)
