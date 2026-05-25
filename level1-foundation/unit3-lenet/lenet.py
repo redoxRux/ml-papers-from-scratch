@@ -1,5 +1,9 @@
 import numpy as np
 
+
+def relu(x):
+    return np.maximum(0, x)
+
 def convolution(image_array, filter_array):
     image_array_height, image_array_width = image_array.shape
     filter_array_height, filter_array_width = filter_array.shape
@@ -28,3 +32,16 @@ def pooling(feature_map, pool_size):
             pool_map[i][j] = np.max(block)
 
     return pool_map
+
+def conv_layer(image, filters):
+    results = []
+    num_filters = filters.shape[0]
+    for i in range(num_filters):
+        convolution_result = convolution(image, filters[i])
+        result = relu(convolution_result)
+        results.append(result)
+    return np.array(results)
+
+def pool_layer(feature_maps, pool):
+    reusults = []
+    
