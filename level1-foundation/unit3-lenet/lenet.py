@@ -8,4 +8,9 @@ def convolution(image_array, filter_array):
 
     output_array = np.zeros((output_array_height, output_array_width))
 
+    for i in range(output_array_height):
+        for j in range(output_array_width):
+            patch = image_array[i:i+filter_array_height, j:j+filter_array_width]
+            output_array[i][j] = np.sum(patch * filter_array)
     
+    return output_array
