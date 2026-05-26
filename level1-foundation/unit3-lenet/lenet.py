@@ -48,3 +48,12 @@ def pool_layer(feature_maps, pool_size):
         pooling_result = pooling(feature_map, pool_size)
         results.append(pooling_result)
     return np.array(results)
+
+def features_to_network(pool_maps, weights, bias):
+    flat = pool_maps.flatten()
+    output = np.dot(flat, weights) + bias
+    result = relu(output)
+    return result 
+
+def forward_pass(image, filters1, filters2, weights, bias):
+    
