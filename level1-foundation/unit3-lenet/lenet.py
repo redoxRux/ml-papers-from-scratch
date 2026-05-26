@@ -42,6 +42,9 @@ def conv_layer(image, filters):
         results.append(result)
     return np.array(results)
 
-def pool_layer(feature_maps, pool):
-    reusults = []
-    
+def pool_layer(feature_maps, pool_size):
+    results = []
+    for feature_map in feature_maps:
+        pooling_result = pooling(feature_map, pool_size)
+        results.append(pooling_result)
+    return np.array(results)
