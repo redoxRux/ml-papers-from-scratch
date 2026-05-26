@@ -5,6 +5,16 @@ def relu(x):
     return np.maximum(0, x)
 
 def convolution(image_array, filter_array):
+    if len(image_array.shape) == 3:
+        height = image_array.shape[1]
+        width = image_array.shape[2]
+        output_height = height - filter_array.shape[0] + 1
+        output_width = width - filter_array.shape[1] + 1
+        output = np.zeros((output_height, output_width))
+        for channel in range(image_array.shape[0]):
+            output += convolution(image_array[channel], filter_array)
+        return output
+
     image_array_height, image_array_width = image_array.shape
     filter_array_height, filter_array_width = filter_array.shape
     output_array_height = image_array_height - filter_array_height + 1
