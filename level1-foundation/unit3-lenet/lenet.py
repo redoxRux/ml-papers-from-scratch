@@ -33,11 +33,11 @@ def pooling(feature_map, pool_size):
 
     return pool_map
 
-def conv_layer(image, filters):
+def conv_layer(input_data, filters):
     results = []
     num_filters = filters.shape[0]
     for i in range(num_filters):
-        convolution_result = convolution(image, filters[i])
+        convolution_result = convolution(input_data, filters[i])
         result = relu(convolution_result)
         results.append(result)
     return np.array(results)
@@ -56,4 +56,9 @@ def features_to_network(pool_maps, weights, bias):
     return result 
 
 def forward_pass(image, filters1, filters2, weights, bias):
-    
+    first_pass  = conv_layer(image, filters1)
+    first_pass_pool = pool_layer(first_pass, 2)
+    second_pass = conv_layer(first_pass_pool, filters2)
+    second_pass_pool = pool_layer(second_pass,2)
+    result = features_to_network(second_pass_pool, weights, bias)
+    return result
