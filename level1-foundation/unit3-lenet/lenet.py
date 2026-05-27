@@ -72,3 +72,11 @@ def forward_pass(image, filters1, filters2, weights, bias):
     second_pass_pool = pool_layer(second_pass,2)
     result = features_to_network(second_pass_pool, weights, bias)
     return result
+
+def one_hot(label):
+    result = np.zeros(10)
+    result[label] = 1
+    return result
+    
+def loss(output, correct):
+    return np.mean((output - correct)**2)
