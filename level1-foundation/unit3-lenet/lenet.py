@@ -118,3 +118,8 @@ def fc_backprop(flat, weights, loss_grad):
     input_gradient = np.dot(loss_grad, weights.T)
 
     return weights_gradient, bias_gradient, input_gradient
+
+def pool_backdrop(input_maps, grad, pool_size):
+    output = np.zeroes(input_maps.shape)
+    output[np.unravel_index(np.argmax)] = gradient_value
+    return output
