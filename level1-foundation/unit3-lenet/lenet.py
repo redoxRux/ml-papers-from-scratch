@@ -80,3 +80,41 @@ def one_hot(label):
     
 def loss(output, correct):
     return np.mean((output - correct)**2)
+
+def loss_gradient(output, correct):
+    # measures how much each output score contributed to the loss
+    # derivative of mean squared error loss: d(loss)/d(output)
+    # loss = mean((output - correct)^2) = (1/n) * sum((output - correct)^2)
+    # derivative = 2 * (output - correct) / n
+    # where n = len(output) = 10 (one per digit)
+    return 2* (output - correct)/len(output)
+
+def fc_backprop(flat, weights, loss_grad):
+    # FC layer forward was: output = np.dot(flat, weights) + bias
+    # we need 3 gradients using chain rule: d(loss)/d(x) = d(loss)/d(output) × d(output)/d(x)
+
+    # WEIGHTS GRADIENT
+    # simple case: y = x·w → dy/dw = x
+    # so: d(output)/d(weights) = flat
+    # by the chain rule: d(loss)/d(weights) = d(loss)/d(output) × d(output)/d(weights)
+    #                                       = loss_grad × flat
+    # shapes: (400,1) · (1,10) = (400,10) — same shape as weights!
+    weights_gradient = np.dot(flat.reshape(-1,1), loss_grad.reshape(1,-1))
+
+    # BIAS GRADIENT
+    # simple case: y = x + b → dy/db = 1
+    # so: d(output)/d(bias) = 1
+    # by the chain rule: d(loss)/d(bias) = d(loss)/d(output) × d(output)/d(bias)
+    #                                    = loss_grad × 1 = loss_grad
+    # shape: (10,) — same shape as bias!
+    bias_gradient = loss_grad
+
+    # INPUT GRADIENT
+    # simple case: y = x·w → dy/dx = w
+    # so: d(output)/d(flat) = weights
+    # by the chain rule: d(loss)/d(flat) = d(loss)/d(output) × d(output)/d(flat)
+    #                                    = loss_grad × weights.T
+    # shapes: (10,) · (10,400) = (400,) — same shape as flat!
+    input_gradient = np.dot(loss_grad, weights.T)
+
+    return weights_gradient, bias_gradient, input_gradient
